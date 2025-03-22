@@ -1,0 +1,3 @@
+[VKCloudServer]
+host="your server ip or domain name"
+port="your server port"
