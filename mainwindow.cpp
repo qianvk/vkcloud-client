@@ -3,6 +3,8 @@
 
 #include "logindialog.h"
 #include "registerdialog.h"
+#include "chatdialog.h"
+#include "tcpmanager.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -15,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(login_dlg_);
 
     connect(login_dlg_, &LoginDialog::SwitchRegister, this, &MainWindow::SlotSwitchRegister);
+    connect(TcpMgr::Instance().get(), &TcpMgr::sig_swich_chatdlg, this, &MainWindow::SlotSwitchChat);
+    TcpMgr::Instance()->sig_swich_chatdlg();
 }
 
 MainWindow::~MainWindow()
@@ -37,4 +41,13 @@ void MainWindow::SlotSwitchLogin()
     login_dlg_->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
     setCentralWidget(login_dlg_);
     connect(login_dlg_, &LoginDialog::SwitchRegister, this, &MainWindow::SlotSwitchRegister);
+}
+
+void MainWindow::SlotSwitchChat()
+{
+    chat_dlg_ = new ChatDialog(this);
+    chat_dlg_->setWindowFlags(Qt::CustomizeWindowHint | Qt::FramelessWindowHint);
+    setCentralWidget(chat_dlg_);
+    this->setMinimumSize(QSize(1050, 900));
+    this->setMaximumSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
 }

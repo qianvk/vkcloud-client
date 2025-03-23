@@ -440,3 +440,82 @@ QScrollBar::right-arrow:horizontal {
 #tip_label[state='error']{
    color: red;
 }
+
+#search_edit {
+    background-color:rgb(247,247,247);
+}
+
+#chat_user_list::item::selected {
+    background-color:#d3d7d4;
+    border:none;
+    outline:none;
+}
+
+#side_bar {
+    background-color:rgb(46,46,46);
+}
+
+ChatUserItem {
+    background-color:rgb(247,247,247);
+    border:none;
+}
+
+#chat_history_lb {
+    color:rgb(153,153,153);
+    font-size:12px;
+    font-family:"Microsoft YaHei";
+}
+
+#user_name_lb {
+    color:rgb(0,0,0);
+    font-size:14px;
+    font-family:"Microsoft YaHei";
+    font-weight:"normal";
+}
+
+
+#date_wid #date_lb {
+    color:rgb(140,140,140);
+    font-size:12px;
+    font-family:"Microsoft YaHei";
+}
+
+QScrollBar:vertical {
+    background: transparent; /* 将轨道背景设置为透明 */
+    width: 8px; /* 滚动条宽度，根据需要调整 */
+    margin: 0px; /* 移除滚动条与滑块之间的间距 */
+}
+
+QScrollBar::handle:vertical {
+    background: rgb(173,170,169); /* 滑块颜色 */
+    min-height: 10px; /* 滑块最小高度，根据需要调整 */
+    border-radius: 4px; /* 滑块边缘圆角，调整以形成椭圆形状 */
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px; /* 移除上下按钮 */
+    border: none; /* 移除边框 */
+    background: transparent; /* 背景透明 */
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none; /* 页面滚动部分背景透明 */
+}
+
+#title_lb{
+    font-family: "Microsoft YaHei";
+    font-size: 18px;
+    font-weight: normal;
+}
+
+#title_wid {
+    border: none; border-bottom: 1px solid lightgray;
+}
+
+#tool_wid {
+    border: none; border-top: 1px solid lightgray;
+}
+
+#text_edit {
+    border: none;
+}

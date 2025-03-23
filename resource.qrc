@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/">
         <file>style/stylesheet.qss</file>
+        <file>resource/search.png</file>
+        <file>resource/clear.png</file>
+        <file>resource/transparent.png'</file>
     </qresource>
 </RCC>

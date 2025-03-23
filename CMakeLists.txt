@@ -46,6 +46,19 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         httpmanager.h httpmanager.cpp
         timerbutton.h timerbutton.cpp
         configurationmanager.h configurationmanager.cpp
+        tcpmanager.h tcpmanager.cpp
+        usermanager.h usermanager.cpp
+        userdata.h userdata.cpp
+        chatdialog.h chatdialog.cpp chatdialog.ui
+        searchlineedit.h searchlineedit.cpp
+
+        chatuserlist.h chatuserlist.cpp
+        chatuseritem.h chatuseritem.cpp chatuseritem.ui
+        listitembase.h listitembase.cpp
+        loadingdialog.h loadingdialog.cpp loadingdialog.ui
+        chatpage.h chatpage.cpp chatpage.ui
+        chatview.h chatview.cpp
+
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET vkcloud APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
