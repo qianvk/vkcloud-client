@@ -45,14 +45,8 @@ void ChatPage::AppendChatMsg(std::shared_ptr<TextChatData> msg)
         ui->chat_history_wid->AppendChatItem(pChatItem);
     }
     else {
-        auto friend_info = UserMgr::Instance()->GetFriendById(msg->_from_uid);
-        if (friend_info == nullptr)
-            return;
-
         role = ChatRole::Other;
         ChatItemBase* pChatItem = new ChatItemBase(role);
-        pChatItem->SetUserName(friend_info->_name);
-        pChatItem->SetUserIcon(QPixmap(friend_info->_icon));
         QWidget* pBubble = nullptr;
         pBubble = new TextBubble(role, msg->_msg_content);
         pChatItem->SetWidget(pBubble);
@@ -69,9 +63,9 @@ void ChatPage::SetUserInfo(std::shared_ptr<UserInfo> user_info)
         AppendChatMsg(msg);
 }
 
-void ChatPage::SlotAppendMessage(std::shared_ptr<FriendInfo> friend_info, std::shared_ptr<TextChatData> msg)
+void ChatPage::SlotAppendMessage(std::shared_ptr<UserInfo> user_info, std::shared_ptr<TextChatData> msg)
 {
-    if (friend_info->relate_id_ != _user_info->relate_id_)
+    if (user_info->relate_id_ != _user_info->relate_id_)
         return;
 
     AppendChatMsg(msg);

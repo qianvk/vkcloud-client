@@ -92,8 +92,7 @@ void ChatDialog::AddChatUserList()
             //     continue;
             // }
             auto *chat_item = new ChatUserItem();
-            auto user_info = std::make_shared<UserInfo>(friend_ele);
-            chat_item->SetInfo(user_info);
+            chat_item->SetInfo(friend_ele);
             QListWidgetItem *item = new QListWidgetItem;
             //qDebug()<<"chat_user_wid sizeHint is " << chat_user_wid->sizeHint();
             item->setSizeHint(chat_item->sizeHint());
@@ -105,16 +104,6 @@ void ChatDialog::AddChatUserList()
         //更新已加载条目
         UserMgr::Instance()->UpdateChatLoadedCount();
     }
-
-
-    // for (int i = 0; i < 1; ++i) {
-    //     auto *chat_item = new ChatUserItem();
-    //     chat_item->SetInfo("qianvk", "", "hello!");
-    //     auto *item = new QListWidgetItem;
-    //     item->setSizeHint(chat_item->sizeHint());
-    //     ui->chat_user_list->addItem(item);
-    //     ui->chat_user_list->setItemWidget(item, chat_item);
-    // }
 }
 
 void ChatDialog::SlotLoadingChatUser()

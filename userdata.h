@@ -81,6 +81,7 @@ struct AuthRsp {
 };
 
 struct TextChatData;
+#if 0
 struct FriendInfo {
     FriendInfo(int uid, QString name, QString nick, QString icon,
         int sex, QString desc, QString back, QString last_msg=""):_uid(uid),
@@ -108,9 +109,10 @@ struct FriendInfo {
     QString _last_msg;
     std::vector<std::shared_ptr<TextChatData>> _chat_msgs;
 };
+#endif
 
 struct UserInfo {
-    UserInfo(const QString& nick, const QString& avatar) : _nick(nick), _icon(avatar) {}
+    UserInfo(uint32_t relate_id, const QString& nick, const QString& avatar) : relate_id_(relate_id), _nick(nick), _icon(avatar) {}
     UserInfo(int uid, QString name, QString nick, QString icon, int sex, QString last_msg = ""):
         _uid(uid),_name(name),_nick(nick),_icon(icon),_sex(sex),_last_msg(last_msg){}
 
@@ -134,11 +136,14 @@ struct UserInfo {
 
     }
 
+    UserInfo(std::shared_ptr<UserInfo> user_info) : relate_id_(user_info->relate_id_), _nick(user_info->_nick){}
+#if 0
     UserInfo(std::shared_ptr<FriendInfo> friend_info):
         _uid(friend_info->_uid), relate_id_(friend_info->relate_id_),_name(friend_info->_name),_nick(friend_info->_nick),
         _icon(friend_info->_icon),_sex(friend_info->_sex),_last_msg(""){
             _chat_msgs = friend_info->_chat_msgs;
         }
+#endif
 
     int _uid;
     int relate_id_;

@@ -117,7 +117,7 @@ void LoginDialog::InitHandlers()
 
         QString nick = json_obj["nick"].toString();
         QString avatar = json_obj["avatar"].toString();
-        auto user_info = std::make_shared<UserInfo>(nick, avatar);
+        auto user_info = std::make_shared<UserInfo>(0, nick, avatar);
         UserMgr::Instance()->SetUserInfo(user_info);
         emit sig_connect_chat(si);
     });

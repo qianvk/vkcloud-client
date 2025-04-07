@@ -25,7 +25,7 @@ protected:
 
 private slots:
     void SlotAppendMsg();
-    void SlotAppendMessage(std::shared_ptr<FriendInfo> friend_info, std::shared_ptr<TextChatData> msg);
+    void SlotAppendMessage(std::shared_ptr<UserInfo> user_info, std::shared_ptr<TextChatData> msg);
 
 private:
     Ui::ChatPage *ui;
