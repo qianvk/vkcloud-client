@@ -120,12 +120,6 @@ struct UserInfo {
         _uid(auth->_uid),_name(auth->_name),_nick(auth->_nick),
         _icon(auth->_icon),_sex(auth->_sex),_last_msg(""){}
 
-    UserInfo(int uid, QString name, QString icon):
-    _uid(uid), _name(name), _icon(icon),_nick(_name),
-    _sex(0),_last_msg(""){
-
-    }
-
     UserInfo(std::shared_ptr<AuthRsp> auth):
         _uid(auth->_uid),_name(auth->_name),_nick(auth->_nick),
         _icon(auth->_icon),_sex(auth->_sex),_last_msg(""){}
