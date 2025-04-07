@@ -35,11 +35,13 @@ public:
     void AddFriend(std::shared_ptr<AuthInfo> auth_info);
     std::shared_ptr<FriendInfo> GetFriendById(int uid);
     void AppendFriendChatMsg(int friend_id,std::vector<std::shared_ptr<TextChatData>>);
+    std::shared_ptr<FriendInfo> GetFriendByRelateId(uint32_t relate_id);
 private:
     UserMgr();
     std::shared_ptr<UserInfo> _user_info;
     std::vector<std::shared_ptr<ApplyInfo>> _apply_list;
     std::vector<std::shared_ptr<FriendInfo>> _friend_list;
+    std::unordered_map<uint32_t, std::shared_ptr<FriendInfo>> friend_map_;
     QMap<int, std::shared_ptr<FriendInfo>> _friend_map;
     QString _token;
     int _chat_loaded;

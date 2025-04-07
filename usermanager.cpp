@@ -77,6 +77,7 @@ void UserMgr::AppendFriendList(QJsonArray array) {
         }
         info->relate_id_ = relate_id;
         _friend_list.push_back(info);
+        friend_map_.emplace(relate_id, info);
         _friend_map.insert(uid, info);
     }
 }
@@ -248,6 +249,12 @@ void UserMgr::AppendFriendChatMsg(int friend_id,std::vector<std::shared_ptr<Text
     }
 
     find_iter.value()->AppendChatMsgs(msgs);
+}
+
+std::shared_ptr<FriendInfo> UserMgr::GetFriendByRelateId(uint32_t relate_id)
+{
+    auto find_iter = friend_map_.find(relate_id);
+    return find_iter == friend_map_.end() ? nullptr : find_iter->second;
 }
 
 

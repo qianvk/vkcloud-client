@@ -20,6 +20,7 @@ ChatPage::ChatPage(QWidget *parent)
 
     _user_info = std::shared_ptr<UserInfo>(new UserInfo(0, "qinwy", "xxx"));
     connect(ui->text_edit, &MessageTextEdit::send, this, &ChatPage::SlotAppendMsg);
+    connect(WebSocketClient::Instance().get(), &WebSocketClient::SigAppendMessage, this, &ChatPage::SlotAppendMessage);
 }
 
 ChatPage::~ChatPage()
@@ -66,6 +67,14 @@ void ChatPage::SetUserInfo(std::shared_ptr<UserInfo> user_info)
     ui->title_lb->setText(user_info->_nick);
     for (const auto& msg : user_info->_chat_msgs)
         AppendChatMsg(msg);
+}
+
+void ChatPage::SlotAppendMessage(std::shared_ptr<FriendInfo> friend_info, std::shared_ptr<TextChatData> msg)
+{
+    if (friend_info->relate_id_ != _user_info->relate_id_)
+        return;
+
+    AppendChatMsg(msg);
 }
 
 void ChatPage::paintEvent(QPaintEvent *event)

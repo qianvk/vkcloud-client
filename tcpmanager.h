@@ -64,6 +64,7 @@ signals:
     void sig_auth_rsp(std::shared_ptr<AuthRsp>);
     void sig_text_chat_msg(std::shared_ptr<TextChatMsg> msg);
     void SigSendText(const QString& text);
+    void SigAppendMessage(std::shared_ptr<FriendInfo> friend_info, std::shared_ptr<TextChatData> msg);
 
 public slots:
     void SlotConnectChat(const ServerInfo& server_info);

@@ -534,6 +534,33 @@ void WebSocketClient::InitHandlers()
 
         emit sig_swich_chatdlg();
     };
+
+    handlers_[static_cast<int>(MessageId::ID_TEXT_CHAT_MSG_RSP)] = [this](const QJsonObject& json_obj) {
+        auto status = static_cast<StatusCode>(json_obj["status"].toInt());
+        if(status != StatusCode::kSuccess){
+            SPDLOG_WARN("Login failed, err is {}", static_cast<int>(status));
+            emit sig_login_failed(status);
+            return;
+        }
+
+        // 接收信息
+        if (!json_obj.contains("contents") || !json_obj["contents"].isArray() || !json_obj.contains("relateId"))
+            return;
+
+        auto relate_id = json_obj["relateId"].toInt();
+        auto friend_ptr = UserMgr::Instance()->GetFriendByRelateId(relate_id);
+        if (friend_ptr == nullptr)
+            return;
+
+        const auto& contents = json_obj["contents"].toArray();
+        for (const auto &content : contents) {
+            if (content.type() != QJsonValue::Object)
+                continue;
+            auto content_obj = content.toObject();
+            friend_ptr->_chat_msgs.emplace_back(std::make_shared<TextChatData>(QString(""), content_obj["content"].toString(), 0, 0, content_obj["self"].toBool()));
+            emit SigAppendMessage(friend_ptr, friend_ptr->_chat_msgs.back());
+        }
+    };
 }
 
 void WebSocketClient::SlotConnectChat(const ServerInfo &server_info)
