@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     QFile qss(":/style/stylesheet.qss");
 
-    spdlog::set_pattern("%Y-%m-%d %H:%M:%S [%l] %s(%!):%# %v");
+    // spdlog::set_pattern("%Y-%m-%d %H:%M:%S [%l] %s(%!):%# %v");
     try {
         if( qss.open(QFile::ReadOnly))
         {

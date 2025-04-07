@@ -92,7 +92,8 @@ void RegisterDialog::InitHandlers()
     handlers_.insert(RequestId::kRegisterUser, [this](const QJsonObject& json_obj) {
         auto status = json_obj["status"].toInt();
         if (status != static_cast<int>(StatusCode::kSuccess)) {
-            ShowTip(json_obj["error"].toString(), false);
+            ShowTip(tr("注册失败请重试"), false);
+            // ShowTip(json_obj["error"].toString(), false);
             return;
         }
 
@@ -155,12 +156,11 @@ void RegisterDialog::on_confirm_button_clicked()
 
     //day11 发送http请求注册用户
     QJsonObject json_obj;
-    json_obj["user"] = ui->user_edit->text();
     json_obj["email"] = ui->email_edit->text();
-    json_obj["passwd"] = ui->password_edit->text();
+    json_obj["password"] = ui->password_edit->text();
     json_obj["confirm"] = ui->confirm_edit->text();
     json_obj["varifycode"] = ui->code_edit->text();
-    SwitchTipPage();
+    // SwitchTipPage();
     HttpManager::Instance()->PostHttpRequest(QUrl(APPCONFIG.GetVKCloudUrlPrefix() + "/api/register"),
                                         json_obj, RequestId::kRegisterUser,Module::kRegister);
 }

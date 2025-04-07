@@ -59,14 +59,23 @@ void UserMgr::AppendFriendList(QJsonArray array) {
     for (const QJsonValue& value : array) {
         auto name = value["name"].toString();
         auto desc = value["desc"].toString();
-        auto icon = value["icon"].toString();
+        auto icon = value["avatar"].toString();
         auto nick = value["nick"].toString();
         auto sex = value["sex"].toInt();
         auto uid = value["uid"].toInt();
         auto back = value["back"].toString();
+        auto relate_id = value["relateId"].toInt();
 
         auto info = std::make_shared<FriendInfo>(uid, name,
                                                  nick, icon, sex, desc, back);
+        const auto& contents = value["contents"].toArray();
+        for (const auto &content : contents) {
+            if (content.type() != QJsonValue::Object)
+                continue;
+            auto content_obj = content.toObject();
+            info->_chat_msgs.emplace_back(std::make_shared<TextChatData>(QString(""), content_obj["content"].toString(), 0, 0, content_obj["self"].toBool()));
+        }
+        info->relate_id_ = relate_id;
         _friend_list.push_back(info);
         _friend_map.insert(uid, info);
     }

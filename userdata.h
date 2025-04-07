@@ -98,6 +98,7 @@ struct FriendInfo {
     void AppendChatMsgs(const std::vector<std::shared_ptr<TextChatData>> text_vec);
 
     int _uid;
+    int relate_id_;
     QString _name;
     QString _nick;
     QString _icon;
@@ -109,6 +110,7 @@ struct FriendInfo {
 };
 
 struct UserInfo {
+    UserInfo(const QString& nick, const QString& avatar) : _nick(nick), _icon(avatar) {}
     UserInfo(int uid, QString name, QString nick, QString icon, int sex, QString last_msg = ""):
         _uid(uid),_name(name),_nick(nick),_icon(icon),_sex(sex),_last_msg(last_msg){}
 
@@ -133,12 +135,13 @@ struct UserInfo {
     }
 
     UserInfo(std::shared_ptr<FriendInfo> friend_info):
-        _uid(friend_info->_uid),_name(friend_info->_name),_nick(friend_info->_nick),
+        _uid(friend_info->_uid), relate_id_(friend_info->relate_id_),_name(friend_info->_name),_nick(friend_info->_nick),
         _icon(friend_info->_icon),_sex(friend_info->_sex),_last_msg(""){
             _chat_msgs = friend_info->_chat_msgs;
         }
 
     int _uid;
+    int relate_id_;
     QString _name;
     QString _nick;
     QString _icon;
@@ -148,14 +151,15 @@ struct UserInfo {
 };
 
 struct TextChatData{
-    TextChatData(QString msg_id, QString msg_content, int fromuid, int touid)
-        :_msg_id(msg_id),_msg_content(msg_content),_from_uid(fromuid),_to_uid(touid){
+    TextChatData(QString msg_id, QString msg_content, int fromuid, int touid, bool is_self = true)
+        :_msg_id(msg_id),_msg_content(msg_content),_from_uid(fromuid),_to_uid(touid), is_self_(is_self) {
 
     }
     QString _msg_id;
     QString _msg_content;
     int _from_uid;
     int _to_uid;
+    bool is_self_;
 };
 
 struct TextChatMsg{

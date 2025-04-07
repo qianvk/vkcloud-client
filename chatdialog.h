@@ -9,6 +9,7 @@ namespace Ui {
 class ChatDialog;
 }
 
+class QListWidgetItem;
 class ChatDialog : public QDialog
 {
     Q_OBJECT
@@ -22,6 +23,7 @@ public:
 
 private slots:
     void SlotLoadingChatUser();
+    void SlotChangeChatInfo(QListWidgetItem *current, QListWidgetItem *previous);
 
 private:
     bool _b_loading;

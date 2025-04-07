@@ -90,7 +90,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_5">
        <item>
-        <widget class="QLabel" name="user_label">
+        <widget class="QLabel" name="email_label">
          <property name="minimumSize">
           <size>
            <width>0</width>
@@ -104,17 +104,20 @@
           </size>
          </property>
          <property name="text">
-          <string>用户</string>
+          <string>邮箱</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="user_edit">
+        <widget class="QLineEdit" name="email_edit">
          <property name="minimumSize">
           <size>
            <width>0</width>
            <height>25</height>
           </size>
+         </property>
+         <property name="text">
+          <string>xijooneor@gmail.com</string>
          </property>
         </widget>
        </item>
@@ -130,7 +133,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="password_edit"/>
+        <widget class="QLineEdit" name="password_edit">
+         <property name="text">
+          <string>qianvk</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>

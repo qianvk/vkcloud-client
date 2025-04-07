@@ -15,6 +15,7 @@ enum class RequestId {
     kGetVerifyCode  =   1001,
     kRegisterUser   =   1002,
     kLogin          =   1003,
+    ID_CHAT_LOGIN = 1005, //登陆聊天服务器
     ID_CHAT_LOGIN_RSP= 1006, //登陆聊天服务器回包
     ID_SEARCH_USER_REQ = 1007, //用户搜索请求
     ID_SEARCH_USER_RSP = 1008, //搜索用户回包
@@ -27,8 +28,25 @@ enum class RequestId {
     ID_TEXT_CHAT_MSG_REQ  = 1017,  //文本聊天信息请求
     ID_TEXT_CHAT_MSG_RSP  = 1018,  //文本聊天信息回复
     ID_NOTIFY_TEXT_CHAT_MSG_REQ = 1019, //通知用户文本聊天信息
-
 };
+
+enum class MessageId {
+    MSG_CHAT_LOGIN = 0,               // 用户登陆
+    MSG_CHAT_LOGIN_RSP = 1,           // 用户登陆回包
+    ID_SEARCH_USER_REQ = 2,           // 用户搜索请求
+    ID_SEARCH_USER_RSP = 3,           // 搜索用户回包
+    ID_ADD_FRIEND_REQ = 4,            // 申请添加好友请求
+    ID_ADD_FRIEND_RSP = 5,            // 申请添加好友回复
+    ID_NOTIFY_ADD_FRIEND_REQ = 6,     // 通知用户添加好友申请
+    ID_AUTH_FRIEND_REQ = 7,           // 认证好友请求
+    ID_AUTH_FRIEND_RSP = 8,           // 认证好友回复
+    ID_NOTIFY_AUTH_FRIEND_REQ = 9,    // 通知用户认证好友申请
+    ID_TEXT_CHAT_MSG_REQ = 10,        // 文本聊天信息请求
+    ID_TEXT_CHAT_MSG_RSP = 11,        // 文本聊天信息回复
+    ID_NOTIFY_TEXT_CHAT_MSG_REQ = 12, // 通知用户文本聊天信息
+    kMessageIdNum
+};
+
 
 enum class StatusCode {
     kSuccess    =   0,
@@ -64,7 +82,7 @@ struct ServerInfo{
     QString host;
     QString port;
     QString token;
-    int uid;
+    uint32_t uid;
 };
 
 enum class ChatRole

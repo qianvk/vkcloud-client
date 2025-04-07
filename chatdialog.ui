@@ -228,6 +228,12 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>ChatPage</class>
+   <extends>QWidget</extends>
+   <header>chatpage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
    <class>SearchLineEdit</class>
    <extends>QLineEdit</extends>
    <header>searchlineedit.h</header>
@@ -236,12 +242,6 @@
    <class>ChatUserList</class>
    <extends>QListWidget</extends>
    <header>chatuserlist.h</header>
-  </customwidget>
-  <customwidget>
-   <class>ChatPage</class>
-   <extends>QWidget</extends>
-   <header location="global">chatpage.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

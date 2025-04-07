@@ -79,7 +79,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QWidget" name="chat_history_wid" native="true"/>
+       <widget class="ChatView" name="chat_history_wid" native="true"/>
       </item>
       <item>
        <widget class="QWidget" name="tool_wid" native="true">
@@ -98,7 +98,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QTextEdit" name="text_edit">
+       <widget class="MessageTextEdit" name="text_edit">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -118,6 +118,19 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ChatView</class>
+   <extends>QWidget</extends>
+   <header>chatview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>MessageTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header location="global">messagetextedit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

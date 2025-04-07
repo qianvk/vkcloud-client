@@ -1,7 +1,9 @@
 #include "chatdialog.h"
 #include "ui_chatdialog.h"
+#include "usermanager.h"
 
 #include <QAction>
+#include <spdlog/spdlog.h>
 
 #include "chatuseritem.h"
 #include "loadingdialog.h"
@@ -45,6 +47,7 @@ ChatDialog::ChatDialog(QWidget *parent)
     AddChatUserList();
 
     connect(ui->chat_user_list, &ChatUserList::SigLoadingChatUser, this, &ChatDialog::SlotLoadingChatUser);
+    connect(ui->chat_user_list, &ChatUserList::currentItemChanged, this, &ChatDialog::SlotChangeChatInfo);
 }
 
 ChatDialog::~ChatDialog()
@@ -81,14 +84,37 @@ void ChatDialog::ShowSearch(bool is_search)
 
 void ChatDialog::AddChatUserList()
 {
-    for (int i = 0; i < 100; ++i) {
-        auto *chat_item = new ChatUserItem();
-        chat_item->SetInfo("qianvk", "", "hello!");
-        auto *item = new QListWidgetItem;
-        item->setSizeHint(chat_item->sizeHint());
-        ui->chat_user_list->addItem(item);
-        ui->chat_user_list->setItemWidget(item, chat_item);
+    auto friend_list = UserMgr::Instance()->GetChatListPerPage();
+    if (friend_list.empty() == false) {
+        for(auto & friend_ele : friend_list){
+            // auto find_iter = _chat_items_added.find(friend_ele->_uid);
+            // if(find_iter != _chat_items_added.end()){
+            //     continue;
+            // }
+            auto *chat_item = new ChatUserItem();
+            auto user_info = std::make_shared<UserInfo>(friend_ele);
+            chat_item->SetInfo(user_info);
+            QListWidgetItem *item = new QListWidgetItem;
+            //qDebug()<<"chat_user_wid sizeHint is " << chat_user_wid->sizeHint();
+            item->setSizeHint(chat_item->sizeHint());
+            ui->chat_user_list->addItem(item);
+            ui->chat_user_list->setItemWidget(item, chat_item);
+            // _chat_items_added.insert(friend_ele->_uid, item);
+        }
+
+        //更新已加载条目
+        UserMgr::Instance()->UpdateChatLoadedCount();
     }
+
+
+    // for (int i = 0; i < 1; ++i) {
+    //     auto *chat_item = new ChatUserItem();
+    //     chat_item->SetInfo("qianvk", "", "hello!");
+    //     auto *item = new QListWidgetItem;
+    //     item->setSizeHint(chat_item->sizeHint());
+    //     ui->chat_user_list->addItem(item);
+    //     ui->chat_user_list->setItemWidget(item, chat_item);
+    // }
 }
 
 void ChatDialog::SlotLoadingChatUser()
@@ -102,4 +128,20 @@ void ChatDialog::SlotLoadingChatUser()
     AddChatUserList();
     loading_dlg->deleteLater();
     _b_loading = false;
+}
+
+void ChatDialog::SlotChangeChatInfo(QListWidgetItem *current, QListWidgetItem *previous)
+{
+    if (!current)
+        return;
+
+    QWidget *widget = ui->chat_user_list->itemWidget(current);
+    if (!widget)
+        return;
+
+    auto *chat_item = qobject_cast<ChatUserItem*>(widget);
+    if (!chat_item)
+        return;
+
+    ui->chat_page->SetUserInfo(chat_item->GetUserInfo());
 }
