@@ -45,6 +45,9 @@ ChatDialog::ChatDialog(QWidget *parent)
 
     ShowSearch(false);
     AddChatUserList();
+    // ui->chat_user_list->setCurrentRow(0);
+    if (ui->chat_user_list->count() > 0)
+        SlotChangeChatInfo(ui->chat_user_list->item(0), nullptr);
 
     connect(ui->chat_user_list, &ChatUserList::SigLoadingChatUser, this, &ChatDialog::SlotLoadingChatUser);
     connect(ui->chat_user_list, &ChatUserList::currentItemChanged, this, &ChatDialog::SlotChangeChatInfo);
