@@ -2,16 +2,15 @@
 #define CHATUSERITEM_H
 
 #include "listitembase.h"
+#include "userdata.h"
 
 namespace Ui {
 class ChatUserItem;
 }
 
-class UserInfo;
 class ChatUserItem : public ListItemBase
 {
     Q_OBJECT
-
 public:
     explicit ChatUserItem(QWidget *parent = nullptr);
     ~ChatUserItem();
@@ -20,7 +19,7 @@ public:
         return QSize(250, 70);
     }
 
-    void SetInfo(QString name, QString head, QString msg);
+    // void SetInfo(QString name, QString head, QString msg);
     void SetInfo(std::shared_ptr<UserInfo> user_info);
     auto GetUserInfo() { return user_info_; }
 

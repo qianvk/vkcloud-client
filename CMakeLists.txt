@@ -51,6 +51,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         userdata.h userdata.cpp
         chatdialog.h chatdialog.cpp chatdialog.ui
         searchlineedit.h searchlineedit.cpp
+        searchlist.h searchlist.cpp
 
         chatuserlist.h chatuserlist.cpp
         chatuseritem.h chatuseritem.cpp chatuseritem.ui

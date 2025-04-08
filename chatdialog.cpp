@@ -1,12 +1,13 @@
 #include "chatdialog.h"
 #include "ui_chatdialog.h"
 #include "usermanager.h"
-
-#include <QAction>
-#include <spdlog/spdlog.h>
-
+#include "searchlist.h"
 #include "chatuseritem.h"
 #include "loadingdialog.h"
+
+#include <spdlog/spdlog.h>
+#include <QAction>
+
 
 ChatDialog::ChatDialog(QWidget *parent)
     : QDialog(parent)
@@ -51,6 +52,9 @@ ChatDialog::ChatDialog(QWidget *parent)
 
     connect(ui->chat_user_list, &ChatUserList::SigLoadingChatUser, this, &ChatDialog::SlotLoadingChatUser);
     connect(ui->chat_user_list, &ChatUserList::currentItemChanged, this, &ChatDialog::SlotChangeChatInfo);
+
+    connect(ui->search_edit, &SearchLineEdit::SigShowSearchList, this, &ChatDialog::SlotShowSearchList);
+    connect(ui->search_edit, &SearchLineEdit::SigInstantSearchRets, this, &ChatDialog::SlotInstantSearchRets);
 }
 
 ChatDialog::~ChatDialog()
@@ -89,7 +93,7 @@ void ChatDialog::AddChatUserList()
 {
     auto friend_list = UserMgr::Instance()->GetChatListPerPage();
     if (friend_list.empty() == false) {
-        for(auto & friend_ele : friend_list){
+        for(auto &friend_ele : friend_list){
             // auto find_iter = _chat_items_added.find(friend_ele->_uid);
             // if(find_iter != _chat_items_added.end()){
             //     continue;
@@ -136,4 +140,46 @@ void ChatDialog::SlotChangeChatInfo(QListWidgetItem *current, QListWidgetItem *p
         return;
 
     ui->chat_page->SetUserInfo(chat_item->GetUserInfo());
+}
+
+void resizeListWidgetToContents(QListWidget* list, int width = 0) {
+    int height = list->count() * list->sizeHintForRow(0) + 2 * list->frameWidth();
+    if (width == 0)
+        width = list->sizeHintForColumn(0) + 2 * list->frameWidth();
+    list->setFixedSize(width, height);
+}
+
+
+void ChatDialog::SlotShowSearchList(const QPoint &relative_pos, int width, QWidget *parent)
+{
+    if (!search_list_) {
+        search_list_ = new SearchList(parent);
+        search_list_->move(relative_pos);
+        search_list_->raise();
+        search_list_->show();
+        SPDLOG_INFO("x {}, y {}, width {}.", relative_pos.x(), relative_pos.y(), width);
+    }
+
+    // auto friend_list = UserMgr::Instance()->GetFriendList();
+    // for(auto &friend_ele : friend_list){
+    //     SPDLOG_INFO("User {}.", friend_ele->_nick.toStdString());
+    //     auto *chat_item = new ChatUserItem();
+    //     chat_item->SetInfo(friend_ele);
+    //     QListWidgetItem *item = new QListWidgetItem;
+    //     item->setSizeHint(QSize(width, chat_item->sizeHint().height()));
+    //     search_list_->addItem(item);
+    //     search_list_->setItemWidget(item, chat_item);
+    //     resizeListWidgetToContents(search_list_, width);
+    // }
+}
+
+void ChatDialog::SlotInstantSearchRets(const InstantSearchRets &search_rets)
+{
+    search_list_->clear();
+    for (const auto& search_pair : search_rets) {
+        search_list_->addItem(search_pair.first);
+        search_list_->setItemWidget(search_pair.first, search_pair.second);
+    }
+
+    resizeListWidgetToContents(search_list_, 232);
 }
