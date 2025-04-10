@@ -19,7 +19,7 @@ public:
         return QSize(250, 70);
     }
 
-    // void SetInfo(QString name, QString head, QString msg);
+    void SetInfo(QString name, QString head, QString msg);
     void SetInfo(std::shared_ptr<UserInfo> user_info);
     auto GetUserInfo() { return user_info_; }
 

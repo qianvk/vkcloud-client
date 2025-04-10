@@ -19,20 +19,20 @@ ChatUserItem::~ChatUserItem()
     SPDLOG_INFO("ChatUserItem nick {} destruct.", _name.toStdString());
 }
 
-// void ChatUserItem::SetInfo(QString name, QString head, QString msg)
-// {
-//     _name = name;
-//     _head = head;
-//     _msg = msg;
+void ChatUserItem::SetInfo(QString name, QString head, QString msg)
+{
+    _name = name;
+    _head = head;
+    _msg = msg;
 
-//     QPixmap pixmap(head);
-//     ui->avatar_lb->setPixmap(pixmap.scaled(ui->avatar_lb->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-//     ui->avatar_lb->setScaledContents(true);
+    QPixmap pixmap(head);
+    ui->avatar_lb->setPixmap(pixmap.scaled(ui->avatar_lb->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    ui->avatar_lb->setScaledContents(true);
 
 
-//     ui->username_lb->setText(name);
-//     ui->chat_history_lb->setText(msg);
-// }
+    ui->username_lb->setText(name);
+    ui->chat_history_lb->setText(msg);
+}
 
 void ChatUserItem::SetInfo(std::shared_ptr<UserInfo> user_info)
 {

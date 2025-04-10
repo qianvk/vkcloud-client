@@ -1,9 +1,12 @@
 #include "searchlineedit.h"
 #include "usermanager.h"
 #include "chatuseritem.h"
+#include "databasemanager.h"
 
 #include <QListWidgetItem>
 #include <spdlog/spdlog.h>
+#include <QSqlQuery>
+#include <QSqlError>
 
 SearchLineEdit::SearchLineEdit(QWidget *parent)
     : QLineEdit(parent)
@@ -49,6 +52,53 @@ void SearchLineEdit::SlotInstantSearch(const QString &text)
 {
     InstantSearchRets search_rets;
     if (!text.isEmpty()) {
+        // 1. Query all message contains text
+        QSqlQuery query(DatabaseManager::Instance()->GetChatDb());
+        query.prepare(R"(
+            SELECT relate_id, content FROM message WHERE content LIKE :text
+            ORDER BY relate_id ASC
+        )");
+        query.bindValue(":text", "%" + text + "%");
+        if (!query.exec()) {
+            SPDLOG_ERROR("Search query execution failed: {}", query.lastError().text().toStdString());
+            emit SigInstantSearchRets(search_rets);
+            return;
+        }
+
+        if (query.next()) {
+            uint32_t last_relate_id = query.value("relate_id").toInt();
+            QString content = query.value("content").toString();
+            int count = 1;
+
+            while (query.next()) {
+                uint32_t relate_id = query.value("relate_id").toInt();
+                if (relate_id == last_relate_id)
+                    ++count;
+                else {
+                    auto *chat_item = new ChatUserItem();
+                    if (count > 1)
+                        chat_item->SetInfo(QString::number(last_relate_id), "", QString::number(count) + " related chats");
+                    else
+                        chat_item->SetInfo(QString::number(last_relate_id), "", content);
+                    QListWidgetItem *item = new QListWidgetItem;
+                    item->setSizeHint(chat_item->sizeHint());
+                    search_rets.emplace_back(item, chat_item);
+
+                    count = 1;
+                    content = query.value("content").toString();
+                }
+            }
+
+            auto *chat_item = new ChatUserItem();
+            if (count > 1)
+                chat_item->SetInfo(QString::number(last_relate_id), "", QString::number(count) + "related chats");
+            else
+                chat_item->SetInfo(QString::number(last_relate_id), "", content);
+            QListWidgetItem *item = new QListWidgetItem;
+            item->setSizeHint(chat_item->sizeHint());
+            search_rets.emplace_back(item, chat_item);
+        }
+
         auto friends = UserMgr::Instance()->GetFriendList();
         for(auto &friend_ele : friends){
             if (!friend_ele->_nick.contains(text))
