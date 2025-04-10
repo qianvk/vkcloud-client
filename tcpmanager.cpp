@@ -8,8 +8,10 @@
 #include <QtWebSockets/QtWebSockets>
 
 #include <spdlog/spdlog.h>
+#include <QSqlQuery>
 
 #include "usermanager.h"
+#include "databasemanager.h"
 
 #ifdef Q_OS_UNIX
 #include <sys/socket.h>
@@ -527,8 +529,42 @@ void WebSocketClient::InitHandlers()
         }
 
         //添加好友列表
-        if (json_obj.contains("friends")) {
-            UserMgr::Instance()->AppendFriendList(json_obj["friends"].toArray());
+        if (json_obj.contains("friends") && json_obj["friends"].isArray()) {
+            const auto& friends = json_obj["friends"].toArray();
+            UserMgr::Instance()->AppendFriendList(friends);
+            QSqlQuery query(DatabaseManager::Instance()->GetChatDb());
+            for (const auto &friend_ele : friends) {
+                if (!friend_ele.isObject())
+                    continue;
+
+                auto friend_obj = friend_ele.toObject();
+                query.prepare("INSERT INTO friend (id, nick, email, avatar) VALUES (:id, :nick, :email, :avatar)");
+                query.bindValue(":id", friend_obj["relateId"].toInt());
+                query.bindValue(":nick", friend_obj["nick"].toString());
+                query.bindValue(":email", friend_obj["email"].toString());
+                query.bindValue(":avatar", friend_obj["avatar"].toString());
+                DatabaseManager::Instance()->ExecQuery(query);
+                if (!friend_obj.contains("contents") || !friend_obj["contents"].isArray())
+                    continue;
+
+                const auto &contents = friend_obj["contents"].toArray();
+                for (const auto &content : contents) {
+                    if (!content.isObject())
+                        continue;
+
+                    auto content_obj = content.toObject();
+                    query.prepare("INSERT INTO message (id, relate_id, is_self, content, type, created) VALUES (:id, :relate_id, :is_self, :content, :type, :created)");
+                    query.bindValue(":id", content_obj["id"].toInt());
+                    query.bindValue(":relate_id", friend_obj["relateId"].toInt());
+                    query.bindValue(":is_self", content_obj["self"].toBool());
+                    query.bindValue(":content", content_obj["content"].toString());
+                    query.bindValue(":type", content_obj["type"].toInt());
+                    qint64 millisecondsSinceEpoch = content_obj["created"].toInteger();
+                    QDateTime date_time = QDateTime::fromMSecsSinceEpoch(millisecondsSinceEpoch);
+                    query.bindValue(":created", date_time.toString(Qt::ISODate));
+                    DatabaseManager::Instance()->ExecQuery(query);
+                }
+            }
         }
 
 

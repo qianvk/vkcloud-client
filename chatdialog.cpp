@@ -4,9 +4,13 @@
 #include "searchlist.h"
 #include "chatuseritem.h"
 #include "loadingdialog.h"
+#include "databasemanager.h"
 
 #include <spdlog/spdlog.h>
 #include <QAction>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlQuery>
 
 
 ChatDialog::ChatDialog(QWidget *parent)
@@ -16,6 +20,8 @@ ChatDialog::ChatDialog(QWidget *parent)
     , _mode(ChatUIMode::ChatMode)
     , _state(ChatUIMode::ChatMode)
 {
+    DatabaseManager::Instance();
+
     ui->setupUi(this);
     ui->search_edit->SetMaxLength(15);
 
